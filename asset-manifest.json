@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/codestring-react-new/static/css/main.674c9123.css",
-    "main.js": "/codestring-react-new/static/js/main.e0c2e9e7.js",
+    "main.js": "/codestring-react-new/static/js/main.152a2302.js",
     "static/media/banner.mp4": "/codestring-react-new/static/media/banner.8e687823b1422880cc3f.mp4",
     "static/media/bghome.svg": "/codestring-react-new/static/media/bghome.de04eae287ff1d29f0b1.svg",
     "static/media/logo2.png": "/codestring-react-new/static/media/logo2.a391ff4a7368424d525a.png",
@@ -20,10 +20,10 @@
     "static/media/Logo3.svg": "/codestring-react-new/static/media/Logo3.0a56f78fead602f0d54c55ddcdf7e616.svg",
     "static/media/Logo4.svg": "/codestring-react-new/static/media/Logo4.5da4c6e0c53e6745b25529891ef82458.svg",
     "main.674c9123.css.map": "/codestring-react-new/static/css/main.674c9123.css.map",
-    "main.e0c2e9e7.js.map": "/codestring-react-new/static/js/main.e0c2e9e7.js.map"
+    "main.152a2302.js.map": "/codestring-react-new/static/js/main.152a2302.js.map"
   },
   "entrypoints": [
     "static/css/main.674c9123.css",
-    "static/js/main.e0c2e9e7.js"
+    "static/js/main.152a2302.js"
   ]
 }
