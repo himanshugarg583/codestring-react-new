@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
  {/* basename="/codestring-react" */}
-    <BrowserRouter>
+    <BrowserRouter basename="/codestring-react-new">
         <App />
         <Toaster/>
       </BrowserRouter>
