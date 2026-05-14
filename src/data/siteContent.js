@@ -78,6 +78,31 @@ const spotlightItems = [
 ]
 
 export const siteContent = {
+  seo: {
+    base: {
+      title:
+        'CodeString | Industry-Aligned Tech Courses, Internships & Placement Support',
+      description:
+        'CodeString helps students and career switchers build job-ready tech skills with industry-aligned courses, mentorship, projects, and placement support.',
+      keywords:
+        'CodeString, coding courses, full stack course, MERN course, Salesforce training, DevOps course, QA automation, data science course, internships, placement support, tech training India, learn coding',
+      canonical: 'https://codestring.in/',
+      ogImage: 'https://codestring.in/favicon.png',
+      ogType: 'website',
+      ogSiteName: 'CodeString',
+      ogLocale: 'en_IN',
+      twitterCard: 'summary_large_image',
+    },
+    summerInternship: {
+      title: 'Summer Internship Program | CodeString',
+      description:
+        'Government-recognized summer internship with MSME + ISO certificates, offer letter, mentor support, projects, and verified completion proof.',
+      keywords:
+        'summer internship, internship certificate, MSME internship, ISO certificate, student internship, tech internship, virtual internship, CodeString',
+      canonical: 'https://codestring.in/summer-internship',
+      ogType: 'website',
+    },
+  },
   hero: {
     titleLines: ['Turn Curiosity Into Code.', 'Build the Career You Actually Want.'],
     tagline:
@@ -91,7 +116,7 @@ export const siteContent = {
     delayMs: 10000,
     storageKey: 'codestring_popup_v1',
     logo: popupLogo,
-    title: '45 Days Internship Program',
+    title: '60 Days Internship Program',
     subtitle: 'React, Node.js Learning & Gen AI',
     highlights: [
       'Letter of Internship',
@@ -103,7 +128,7 @@ export const siteContent = {
     ],
     startDate: 'Starting from 1 June 2026',
     feeLabel: 'Program Fee',
-    feeValue: 'INR 2,999/-',
+    feeValue: 'INR 999/-',
     cta: 'Limited Seats | Apply Now',
   },
   stats: [

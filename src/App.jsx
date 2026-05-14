@@ -8,6 +8,74 @@ import SummerInternshipPage from './pages/SummerInternshipPage'
 import { courses } from './data/courses'
 import { siteContent } from './data/siteContent'
 
+const upsertMetaTag = (attrName, attrValue, content) => {
+  if (!content || typeof document === 'undefined') return
+  let tag = document.querySelector(`meta[${attrName}="${attrValue}"]`)
+  if (!tag) {
+    tag = document.createElement('meta')
+    tag.setAttribute(attrName, attrValue)
+    document.head.appendChild(tag)
+  }
+  tag.setAttribute('content', content)
+}
+
+const upsertLinkTag = (rel, href) => {
+  if (!href || typeof document === 'undefined') return
+  let link = document.querySelector(`link[rel="${rel}"]`)
+  if (!link) {
+    link = document.createElement('link')
+    link.setAttribute('rel', rel)
+    document.head.appendChild(link)
+  }
+  link.setAttribute('href', href)
+}
+
+const updateSeoTags = (seo) => {
+  if (!seo || typeof document === 'undefined') return
+
+  if (seo.title) {
+    document.title = seo.title
+    upsertMetaTag('property', 'og:title', seo.title)
+    upsertMetaTag('name', 'twitter:title', seo.title)
+  }
+
+  if (seo.description) {
+    upsertMetaTag('name', 'description', seo.description)
+    upsertMetaTag('property', 'og:description', seo.description)
+    upsertMetaTag('name', 'twitter:description', seo.description)
+  }
+
+  if (seo.keywords) {
+    upsertMetaTag('name', 'keywords', seo.keywords)
+  }
+
+  if (seo.canonical) {
+    upsertLinkTag('canonical', seo.canonical)
+    upsertMetaTag('property', 'og:url', seo.canonical)
+  }
+
+  if (seo.ogImage) {
+    upsertMetaTag('property', 'og:image', seo.ogImage)
+    upsertMetaTag('name', 'twitter:image', seo.ogImage)
+  }
+
+  if (seo.ogType) {
+    upsertMetaTag('property', 'og:type', seo.ogType)
+  }
+
+  if (seo.ogSiteName) {
+    upsertMetaTag('property', 'og:site_name', seo.ogSiteName)
+  }
+
+  if (seo.ogLocale) {
+    upsertMetaTag('property', 'og:locale', seo.ogLocale)
+  }
+
+  if (seo.twitterCard) {
+    upsertMetaTag('name', 'twitter:card', seo.twitterCard)
+  }
+}
+
 const courseHrefByCategory = (category) => {
   const course = courses.find((item) => item.category === category)
   return course ? `course=${course.slug}` : '#'
@@ -90,6 +158,7 @@ const {
   blog,
   footer,
   socialLinks,
+  seo,
 } = siteContent
 
 const benefitIcons = {
@@ -358,6 +427,14 @@ function App() {
 
     return () => window.clearTimeout(timer)
   }, [popup])
+
+  useEffect(() => {
+    const baseSeo = seo?.base || {}
+    const pageSeo =
+      activePage === 'summer-internship' ? seo?.summerInternship || {} : {}
+    const resolvedSeo = { ...baseSeo, ...pageSeo }
+    updateSeoTags(resolvedSeo)
+  }, [activePage, seo])
 
   const handleClosePopup = () => {
     setIsPopupOpen(false)
