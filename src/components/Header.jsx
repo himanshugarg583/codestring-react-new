@@ -7,7 +7,7 @@ function Header({ navItems }) {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <a href="#" className="flex items-center gap-3" aria-label="Go to home page">
+        <a href="/" className="flex items-center gap-3" aria-label="Go to home page">
           <img src={logo} alt="CodeString" className="h-9 w-auto" />
         </a>
         <nav className="hidden items-center gap-7 text-sm font-semibold text-slate-700 lg:flex">

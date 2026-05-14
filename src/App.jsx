@@ -78,14 +78,14 @@ const updateSeoTags = (seo) => {
 
 const courseHrefByCategory = (category) => {
   const course = courses.find((item) => item.category === category)
-  return course ? `course=${course.slug}` : '#'
+  return course ? `/course/${encodeURIComponent(course.slug)}` : '#'
 }
 
 const fullStackSubmenu = courses
   .filter((course) => course.category === 'Full Stack')
   .map((course) => ({
     label: course.menuLabel || course.title,
-    href: `course=${course.slug}`,
+    href: `/course/${encodeURIComponent(course.slug)}`,
   }))
 
 const navItems = [
@@ -119,7 +119,7 @@ const navItems = [
   },
   {
     label: 'Summer Internship',
-    href: 'summer-internship',
+    href: '/summer-internship',
     dropdown: [],
   },
   {
@@ -387,28 +387,52 @@ function App() {
     'https://docs.google.com/forms/d/e/1FAIpQLSe5r6u16N-cNgy9cJfifrxatcu5UsNUsVbLvXDGbcDfMZeGGw/alreadyresponded'
 
   useEffect(() => {
-    const updateFromHash = () => {
+    const updateFromLocation = () => {
       if (typeof window === 'undefined') return
-      const hash = window.location.hash.replace('#', '')
+      const { hash, pathname, search } = window.location
+      const normalizedPath = pathname.replace(/\/+$/, '') || '/'
+      const cleanHash = hash.replace('#', '')
+      const searchParams = new URLSearchParams(search)
 
-      if (hash === 'summer-internship') {
+      if (normalizedPath === '/summer-internship') {
         setActivePage('summer-internship')
         return
       }
 
-      if (hash.startsWith('course=')) {
-        const slug = hash.replace('course=', '')
+      if (cleanHash === 'summer-internship') {
+        setActivePage('summer-internship')
+        return
+      }
+
+      const courseSlugFromPath = normalizedPath.startsWith('/course/')
+        ? decodeURIComponent(normalizedPath.replace('/course/', ''))
+        : ''
+      const courseSlugFromQuery = searchParams.get('course') || ''
+      const courseSlugFromHash = cleanHash.startsWith('course=')
+        ? cleanHash.replace('course=', '')
+        : ''
+      const courseSlug =
+        courseSlugFromPath || courseSlugFromQuery || courseSlugFromHash
+
+      if (courseSlug) {
+        const slug = courseSlug.trim()
         const match = courses.find((course) => course.slug === slug)
         setActiveCourseSlug(match ? match.slug : courses[0]?.slug || '')
-        setActivePage('course')
-        return
+        if (match) {
+          setActivePage('course')
+          return
+        }
       }
       setActivePage('home')
     }
 
-    updateFromHash()
-    window.addEventListener('hashchange', updateFromHash)
-    return () => window.removeEventListener('hashchange', updateFromHash)
+    updateFromLocation()
+    window.addEventListener('hashchange', updateFromLocation)
+    window.addEventListener('popstate', updateFromLocation)
+    return () => {
+      window.removeEventListener('hashchange', updateFromLocation)
+      window.removeEventListener('popstate', updateFromLocation)
+    }
   }, [])
 
   useEffect(() => {
