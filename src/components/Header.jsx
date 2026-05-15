@@ -3,6 +3,8 @@ import logo from '../assets/Logo/logo.png'
 
 function Header({ navItems }) {
   const [openSubmenu, setOpenSubmenu] = useState(null)
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [openMobileSection, setOpenMobileSection] = useState(null)
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
@@ -158,21 +160,37 @@ function Header({ navItems }) {
           })}
         </nav>
         <div className="flex items-center gap-4">
-          <a
-            href="#"
-            className="hidden text-sm font-semibold text-slate-700 hover:text-brand-600 md:inline-flex"
+          <button
+            type="button"
+            onClick={() => setIsMobileOpen(true)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:text-brand-600 lg:hidden"
+            aria-label="Open menu"
           >
-            {/* Login */}
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                d="M4 7h16M4 12h16M4 17h16"
+              />
+            </svg>
+          </button>
+          <a
+            href="/login"
+            className="hidden items-center justify-center rounded-md border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 md:inline-flex"
+          >
+            Login
+          </a>
+          <a
+            href="/register"
+            className="hidden rounded-md bg-[#0086c9] px-6 py-2.5 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#0077b3] md:inline-flex"
+          >
+            Register
           </a>
           <button
             type="button"
-            className="hidden rounded-md bg-[#0086c9] px-6 py-2.5 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#0077b3] md:inline-flex"
-          >
-            {/* Register */}
-          </button>
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:text-brand-600"
+            className="hidden h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:text-brand-600 lg:inline-flex"
             aria-label="Cart"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
@@ -195,7 +213,7 @@ function Header({ navItems }) {
           </button>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:text-brand-600"
+            className="hidden h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:text-brand-600 lg:inline-flex"
             aria-label="Search"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
@@ -211,6 +229,177 @@ function Header({ navItems }) {
           </button>
         </div>
       </div>
+
+      {isMobileOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex lg:hidden"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setIsMobileOpen(false)}
+          />
+          <div className="relative ml-auto h-full w-80 max-w-[85%] bg-white px-5 py-6 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-ink">Menu</span>
+              <button
+                type="button"
+                onClick={() => setIsMobileOpen(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600"
+                aria-label="Close menu"
+              >
+                <span aria-hidden="true">x</span>
+              </button>
+            </div>
+            <div className="mt-5 flex items-center gap-3">
+              <button
+                type="button"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600"
+                aria-label="Cart"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M7 9h10l-1.2 8.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 6H4"
+                  />
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    d="M9 12h6"
+                  />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600"
+                aria-label="Search"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11 19a8 8 0 1 1 5.66-2.34L21 21"
+                  />
+                </svg>
+              </button>
+            </div>
+            <nav className="mt-6 space-y-5 text-sm font-semibold text-slate-700">
+              {navItems.map((item) => {
+                const hasDropdown = item.dropdown.length > 0
+
+                return (
+                  <div key={item.label}>
+                    {hasDropdown ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setOpenMobileSection((prev) =>
+                            prev === item.label ? null : item.label,
+                          )
+                        }
+                        className="flex w-full items-center justify-between"
+                        aria-expanded={openMobileSection === item.label}
+                      >
+                        <span>{item.label}</span>
+                        <svg
+                          viewBox="0 0 16 16"
+                          aria-hidden="true"
+                          className="h-3.5 w-3.5 text-slate-500"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06L8.53 10.53a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+                          />
+                        </svg>
+                      </button>
+                    ) : (
+                      <a
+                        href={item.href}
+                        onClick={() => setIsMobileOpen(false)}
+                        className="block"
+                      >
+                        {item.label}
+                      </a>
+                    )}
+                    {hasDropdown && openMobileSection === item.label ? (
+                      <div className="mt-3 space-y-3 pl-3">
+                        {item.dropdown.map((link) => (
+                          <div key={link.label}>
+                            {link.submenu ? (
+                              <>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                                  {link.label}
+                                </p>
+                                <div className="mt-2 space-y-2 text-sm font-medium text-slate-600">
+                                  {link.submenu.map((subItem) => {
+                                    const label =
+                                      typeof subItem === 'string'
+                                        ? subItem
+                                        : subItem.label
+                                    const href =
+                                      typeof subItem === 'string'
+                                        ? '#'
+                                        : subItem.href
+
+                                    return (
+                                      <a
+                                        key={label}
+                                        href={href}
+                                        onClick={() => setIsMobileOpen(false)}
+                                        className="block"
+                                      >
+                                        {label}
+                                      </a>
+                                    )
+                                  })}
+                                </div>
+                              </>
+                            ) : (
+                              <a
+                                href={link.href}
+                                onClick={() => setIsMobileOpen(false)}
+                                className="block text-sm font-medium text-slate-600"
+                              >
+                                {link.label}
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                )
+              })}
+            </nav>
+            <div className="mt-6 border-t border-slate-200 pt-4">
+              <a
+                href="/login"
+                onClick={() => setIsMobileOpen(false)}
+                className="block w-full rounded-md border border-[#0086c9] bg-[#e7f3fb] px-4 py-2 text-center text-sm font-semibold text-[#0086c9]"
+              >
+                Login
+              </a>
+              <a
+                href="/register"
+                onClick={() => setIsMobileOpen(false)}
+                className="mt-3 block rounded-md bg-[#0086c9] px-4 py-2 text-center text-sm font-semibold text-white"
+              >
+                Register
+              </a>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </header>
   )
 }

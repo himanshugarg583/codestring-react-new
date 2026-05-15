@@ -5,6 +5,13 @@ import Carousel from './components/Carousel'
 import MentorsCarousel from './components/MentorsCarousel'
 import CoursePage from './pages/CoursePage'
 import SummerInternshipPage from './pages/SummerInternshipPage'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import AboutPage from './pages/AboutPage'
+import ContactPage from './pages/ContactPage'
+import BlogPage from './pages/BlogPage'
+import EventsPage from './pages/EventsPage'
+import GalleryPage from './pages/GalleryPage'
 import { courses } from './data/courses'
 import { siteContent } from './data/siteContent'
 
@@ -126,17 +133,17 @@ const navItems = [
     label: 'Resource Center',
     href: '#',
     dropdown: [
-      { label: 'Events & PR', href: '#', arrow: false },
-      { label: 'Blog', href: '#', arrow: false },
-      { label: 'Gallery', href: '#', arrow: false },
+      { label: 'Events & PR', href: '/events', arrow: false },
+      { label: 'Blog', href: '/blog', arrow: false },
+      { label: 'Gallery', href: '/gallery', arrow: false },
     ],
   },
   {
     label: 'About',
-    href: '#',
+    href: '/about',
     dropdown: [
-      { label: 'About Us', href: '#', arrow: false },
-      { label: 'Contact Us', href: '#', arrow: false },
+      { label: 'About Us', href: '/about', arrow: false },
+      { label: 'Contact Us', href: '/contact', arrow: false },
     ],
   },
 ]
@@ -146,6 +153,7 @@ const {
   stats,
   whyChoose,
   programs,
+  leadMagnets,
   skills,
   partners,
   mentors,
@@ -381,6 +389,16 @@ function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [isWhatsappOpen, setIsWhatsappOpen] = useState(false)
   const [whatsappMessage, setWhatsappMessage] = useState('')
+  const [isLeadOpen, setIsLeadOpen] = useState(false)
+  const [isLeadSubmitting, setIsLeadSubmitting] = useState(false)
+  const [leadError, setLeadError] = useState('')
+  const [activeLead, setActiveLead] = useState(null)
+  const [leadForm, setLeadForm] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    interest: '',
+  })
 
   const whatsappNumber = '916376532619'
   const applicationFormUrl =
@@ -399,8 +417,78 @@ function App() {
         return
       }
 
+      if (normalizedPath === '/login') {
+        setActivePage('login')
+        return
+      }
+
+      if (normalizedPath === '/register') {
+        setActivePage('register')
+        return
+      }
+
+      if (normalizedPath === '/about') {
+        setActivePage('about')
+        return
+      }
+
+      if (normalizedPath === '/contact') {
+        setActivePage('contact')
+        return
+      }
+
+      if (normalizedPath === '/blog') {
+        setActivePage('blog')
+        return
+      }
+
+      if (normalizedPath === '/events') {
+        setActivePage('events')
+        return
+      }
+
+      if (normalizedPath === '/gallery') {
+        setActivePage('gallery')
+        return
+      }
+
       if (cleanHash === 'summer-internship') {
         setActivePage('summer-internship')
+        return
+      }
+
+      if (cleanHash === 'login') {
+        setActivePage('login')
+        return
+      }
+
+      if (cleanHash === 'register') {
+        setActivePage('register')
+        return
+      }
+
+      if (cleanHash === 'about') {
+        setActivePage('about')
+        return
+      }
+
+      if (cleanHash === 'contact') {
+        setActivePage('contact')
+        return
+      }
+
+      if (cleanHash === 'blog') {
+        setActivePage('blog')
+        return
+      }
+
+      if (cleanHash === 'events') {
+        setActivePage('events')
+        return
+      }
+
+      if (cleanHash === 'gallery') {
+        setActivePage('gallery')
         return
       }
 
@@ -455,7 +543,23 @@ function App() {
   useEffect(() => {
     const baseSeo = seo?.base || {}
     const pageSeo =
-      activePage === 'summer-internship' ? seo?.summerInternship || {} : {}
+      activePage === 'summer-internship'
+        ? seo?.summerInternship || {}
+        : activePage === 'login'
+          ? seo?.login || {}
+          : activePage === 'register'
+            ? seo?.register || {}
+            : activePage === 'about'
+              ? seo?.about || {}
+              : activePage === 'contact'
+                ? seo?.contact || {}
+                : activePage === 'blog'
+                  ? seo?.blog || {}
+                  : activePage === 'events'
+                    ? seo?.events || {}
+                    : activePage === 'gallery'
+                      ? seo?.gallery || {}
+                      : {}
     const resolvedSeo = { ...baseSeo, ...pageSeo }
     updateSeoTags(resolvedSeo)
   }, [activePage, seo])
@@ -494,6 +598,109 @@ function App() {
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
     setIsWhatsappOpen(false)
     setWhatsappMessage('')
+  }
+
+  const openLeadModal = (lead, interest) => {
+    setActiveLead(lead)
+    setLeadError('')
+    setLeadForm((prev) => ({
+      ...prev,
+      interest: interest || lead?.title || '',
+    }))
+    setIsLeadOpen(true)
+  }
+
+  const closeLeadModal = () => {
+    setIsLeadOpen(false)
+    setActiveLead(null)
+    setLeadError('')
+  }
+
+  const handleLeadChange = (event) => {
+    const { name, value } = event.target
+    setLeadForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleLeadSubmit = (event) => {
+    event.preventDefault()
+    if (isLeadSubmitting) return
+
+    const email = leadForm.email.trim()
+    const phone = leadForm.phone.trim()
+    if (!email && !phone) {
+      setLeadError('Please enter an email or WhatsApp number to continue.')
+      return
+    }
+
+    setIsLeadSubmitting(true)
+
+    if (typeof window !== 'undefined') {
+      const payload = {
+        name: leadForm.fullName.trim(),
+        email,
+        phone,
+        interest: leadForm.interest.trim(),
+        leadTitle: activeLead?.title || 'Lead Magnet',
+        leadType: activeLead?.tag || 'Resource',
+        createdAt: new Date().toISOString(),
+      }
+      try {
+        const storageKey = 'codestring_leads_v1'
+        const stored = window.localStorage.getItem(storageKey)
+        const list = stored ? JSON.parse(stored) : []
+        list.push(payload)
+        window.localStorage.setItem(storageKey, JSON.stringify(list))
+      } catch {
+        // Ignore storage issues to avoid blocking downloads.
+      }
+    }
+
+    const fallbackUrl = leadMagnets?.fallbackSyllabusUrl
+    const downloadUrl = activeLead?.fileUrl || fallbackUrl || '#'
+    if (typeof window !== 'undefined' && downloadUrl !== '#') {
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.download = ''
+      link.rel = 'noopener'
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+    }
+
+    window.setTimeout(() => {
+      setIsLeadSubmitting(false)
+      setIsLeadOpen(false)
+    }, 700)
+  }
+
+  const handleCourseSyllabusDownload = (course) => {
+    const fallbackUrl = leadMagnets?.fallbackSyllabusUrl
+    const fileUrl = course?.syllabusUrl || fallbackUrl
+    openLeadModal(
+      {
+        title: 'Download Detailed Syllabus',
+        description: `Get the detailed syllabus for ${course?.title || 'this course'}.`,
+        fileUrl,
+        tag: 'Syllabus',
+      },
+      course?.title || '',
+    )
+  }
+
+  const handleProgramSyllabusDownload = (program) => {
+    const match = courses.find((course) => course.slug === program.syllabusSlug)
+    const fallbackUrl = leadMagnets?.fallbackSyllabusUrl
+    const fileUrl = match?.syllabusUrl || fallbackUrl
+    const interest = match?.title || program.title
+    openLeadModal(
+      {
+        title: 'Download Detailed Syllabus',
+        description: `Get the detailed syllabus for ${interest}.`,
+        fileUrl,
+        tag: 'Syllabus',
+      },
+      interest,
+    )
   }
 
   return (
@@ -577,10 +784,27 @@ function App() {
 
       {activePage === 'course' ? (
         <main>
-          <CoursePage course={activeCourse} />
+          <CoursePage
+            course={activeCourse}
+            onSyllabusDownload={handleCourseSyllabusDownload}
+          />
         </main>
       ) : activePage === 'summer-internship' ? (
         <SummerInternshipPage />
+      ) : activePage === 'login' ? (
+        <LoginPage />
+      ) : activePage === 'register' ? (
+        <RegisterPage />
+      ) : activePage === 'about' ? (
+        <AboutPage />
+      ) : activePage === 'contact' ? (
+        <ContactPage />
+      ) : activePage === 'blog' ? (
+        <BlogPage />
+      ) : activePage === 'events' ? (
+        <EventsPage />
+      ) : activePage === 'gallery' ? (
+        <GalleryPage />
       ) : (
         <main>
           <section className="relative overflow-hidden bg-[linear-gradient(100deg,#fffaf2_0%,#fffaf2_45%,#f4f7ff_70%,#ffe6d2_100%)]">
@@ -632,6 +856,52 @@ function App() {
               ))}
             </div>
           </section>
+
+          {leadMagnets?.items?.length ? (
+            <section className="bg-white py-14">
+              <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[0.95fr_1.05fr]">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0086c9]">
+                    Lead Magnets
+                  </p>
+                  <h2 className="mt-3 text-2xl font-display font-semibold text-ink sm:text-3xl">
+                    {leadMagnets.title}
+                  </h2>
+                  <p className="mt-3 text-sm text-slate-600">
+                    {leadMagnets.subtitle}
+                  </p>
+                  <div className="mt-6 rounded-xl border border-slate-200 bg-[#f8fbff] p-4 text-xs text-slate-600">
+                    Download a free roadmap and we will send you occasional updates with new batches and career tips.
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {leadMagnets.items.map((item) => (
+                    <article
+                      key={item.title}
+                      className="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft"
+                    >
+                      <span className="inline-flex rounded-full bg-[#e7f3fb] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[#0086c9]">
+                        {item.tag}
+                      </span>
+                      <h3 className="mt-3 text-base font-semibold text-ink">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-sm text-slate-600">
+                        {item.description}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => openLeadModal(item, item.title)}
+                        className="mt-4 inline-flex items-center justify-center rounded-md bg-[#0086c9] px-4 py-2 text-xs font-semibold text-white"
+                      >
+                        Get Free PDF
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
 
           <Carousel
             title={whyChoose.title}
@@ -720,6 +990,7 @@ function App() {
                       </div>
                       <button
                         type="button"
+                        onClick={() => handleProgramSyllabusDownload(card)}
                         className="whitespace-nowrap rounded-md bg-[#0086c9] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white shadow-sm"
                       >
                         {card.cta}
@@ -1063,6 +1334,95 @@ function App() {
       )}
 
       <Footer content={footer} socialLinks={socialLinks} />
+
+      {isLeadOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6"
+          role="dialog"
+          aria-modal="true"
+          onClick={closeLeadModal}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0086c9]">
+                  {activeLead?.tag || 'Resource'}
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-ink">
+                  {activeLead?.title || leadMagnets?.form?.title}
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  {activeLead?.description || leadMagnets?.form?.subtitle}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={closeLeadModal}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600"
+                aria-label="Close lead form"
+              >
+                <span aria-hidden="true">x</span>
+              </button>
+            </div>
+            <form onSubmit={handleLeadSubmit} className="mt-5 space-y-3">
+              <input
+                name="fullName"
+                value={leadForm.fullName}
+                onChange={handleLeadChange}
+                placeholder="Full name"
+                className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-brand-400 focus:outline-none"
+              />
+              <input
+                name="email"
+                type="email"
+                value={leadForm.email}
+                onChange={handleLeadChange}
+                placeholder="Email"
+                className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-brand-400 focus:outline-none"
+              />
+              <input
+                name="phone"
+                value={leadForm.phone}
+                onChange={handleLeadChange}
+                placeholder="WhatsApp number"
+                className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-brand-400 focus:outline-none"
+              />
+              <input
+                name="interest"
+                value={leadForm.interest}
+                onChange={handleLeadChange}
+                placeholder="Course of interest"
+                className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-brand-400 focus:outline-none"
+              />
+              {leadError ? (
+                <p className="rounded-md bg-red-50 px-3 py-2 text-xs font-semibold text-red-600">
+                  {leadError}
+                </p>
+              ) : null}
+              <label className="flex items-start gap-2 text-[11px] text-slate-600">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300"
+                  defaultChecked
+                />
+                <span>{leadMagnets?.form?.consent}</span>
+              </label>
+              <button
+                type="submit"
+                disabled={isLeadSubmitting}
+                className="w-full rounded-md bg-[#0086c9] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0077b3] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isLeadSubmitting
+                  ? 'Preparing download...'
+                  : leadMagnets?.form?.submit || 'Download Now'}
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : null}
 
       <button
         type="button"

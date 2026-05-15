@@ -97,6 +97,7 @@ const buildCourse = (overrides) => ({
   assessments: overrides.assessments || 'Assignments, Projects, Tests',
   heroImage: overrides.heroImage || defaultHeroImage,
   sidebarImage: overrides.sidebarImage || defaultSidebarImage,
+  syllabusUrl: overrides.syllabusUrl || '/lead-magnets/detailed-syllabus.pdf',
   highlights: overrides.highlights || defaultHighlights,
   tabs: overrides.tabs || defaultTabs,
   description: overrides.description || defaultDescription,

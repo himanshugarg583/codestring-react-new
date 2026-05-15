@@ -102,6 +102,62 @@ export const siteContent = {
       canonical: 'https://codestring.in/summer-internship',
       ogType: 'website',
     },
+    login: {
+      title: 'Login | CodeString',
+      description:
+        'Login to access your CodeString courses, roadmaps, and mentor updates.',
+      keywords: 'CodeString login, student login, course access',
+      canonical: 'https://codestring.in/login',
+      ogType: 'website',
+    },
+    register: {
+      title: 'Register | CodeString',
+      description:
+        'Create a CodeString account to unlock courses, roadmaps, and mentorship updates.',
+      keywords: 'CodeString register, sign up, create account',
+      canonical: 'https://codestring.in/register',
+      ogType: 'website',
+    },
+    about: {
+      title: 'About Us | CodeString',
+      description:
+        'Learn about CodeString, our mission, leadership, and the team building industry-ready skills.',
+      keywords: 'CodeString about, mission, team, leadership',
+      canonical: 'https://codestring.in/about',
+      ogType: 'website',
+    },
+    contact: {
+      title: 'Contact Us | CodeString',
+      description:
+        'Get in touch with CodeString for course enquiries, support, and guidance.',
+      keywords: 'CodeString contact, enquiry, support, address, phone',
+      canonical: 'https://codestring.in/contact',
+      ogType: 'website',
+    },
+    blog: {
+      title: 'Blog | CodeString',
+      description:
+        'Read insights, trends, and tech updates from CodeString mentors and students.',
+      keywords: 'CodeString blog, tech insights, trends, learning',
+      canonical: 'https://codestring.in/blog',
+      ogType: 'website',
+    },
+    events: {
+      title: 'Events & PR | CodeString',
+      description:
+        'Explore CodeString events, conferences, and press releases.',
+      keywords: 'CodeString events, press release, conferences, workshops',
+      canonical: 'https://codestring.in/events',
+      ogType: 'website',
+    },
+    gallery: {
+      title: 'Gallery | CodeString',
+      description:
+        'Explore photos and videos from CodeString workshops, events, and sessions.',
+      keywords: 'CodeString gallery, images, videos, events',
+      canonical: 'https://codestring.in/gallery',
+      ogType: 'website',
+    },
   },
   hero: {
     titleLines: ['Turn Curiosity Into Code.', 'Build the Career You Actually Want.'],
@@ -110,6 +166,36 @@ export const siteContent = {
     cta: 'Start Learning Free',
     image: heroGirl,
     imageAlt: 'Student learning',
+  },
+  leadMagnets: {
+    title: 'Free Career Roadmaps (PDF)',
+    subtitle:
+      'Get a practical, step-by-step roadmap and start planning your next career move today.',
+    fallbackSyllabusUrl: '/lead-magnets/detailed-syllabus.pdf',
+    form: {
+      title: 'Get Your Free PDF',
+      subtitle:
+        'Enter your email or WhatsApp number and the download will start instantly.',
+      submit: 'Download Now',
+      consent:
+        'I agree to receive the PDF and occasional updates related to courses and career guidance.',
+    },
+    items: [
+      {
+        title: 'The 2026 Full-Stack Developer Roadmap',
+        description:
+          'A clear path from fundamentals to deployment, portfolios, and interviews.',
+        tag: 'Roadmap',
+        fileUrl: '/lead-magnets/2026-full-stack-developer-roadmap.pdf',
+      },
+      {
+        title: 'How to Transition to Data Science from a Non-Tech Background',
+        description:
+          'Learn the skills, projects, and timeline to make a confident career switch.',
+        tag: 'Career Switch',
+        fileUrl: '/lead-magnets/data-science-transition-guide.pdf',
+      },
+    ],
   },
   popup: {
     enabled: true,
@@ -170,7 +256,8 @@ export const siteContent = {
         title: 'Full-Stack Development Bootcamp',
         description:
           'Master frontend to backend - from HTML/CSS to Node.js and databases - in 5-6 months with placement support.',
-        cta: 'Learn More',
+        cta: 'Download Detailed Syllabus',
+        syllabusSlug: 'full-stack-mern-beginner',
         accent: '#fde7a0',
       },
       {
@@ -178,7 +265,8 @@ export const siteContent = {
         title: 'Quick Skills Sprint',
         description:
           'Nail one high-demand skill in under 2 months. Perfect for working professionals and college students.',
-        cta: 'Learn More',
+        cta: 'Download Detailed Syllabus',
+        syllabusSlug: 'qa-automation',
         accent: '#ddf2c6',
       },
       {
@@ -186,7 +274,8 @@ export const siteContent = {
         title: 'Campus to Corporate Program',
         description:
           'Structured training co-designed with hiring companies so your skills match exactly what the industry needs right now.',
-        cta: 'Learn More',
+        cta: 'Download Detailed Syllabus',
+        syllabusSlug: 'dev-ops',
         accent: '#d6f0ff',
       },
     ],

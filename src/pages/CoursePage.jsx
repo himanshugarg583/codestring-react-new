@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function CoursePage({ course }) {
+function CoursePage({ course, onSyllabusDownload }) {
   if (!course) return null
 
   const tabItems = course.tabs || []
@@ -8,6 +8,16 @@ function CoursePage({ course }) {
     'https://docs.google.com/forms/d/e/1FAIpQLSe5r6u16N-cNgy9cJfifrxatcu5UsNUsVbLvXDGbcDfMZeGGw/alreadyresponded'
 
   const [activeTab, setActiveTab] = useState(tabItems[0] || '')
+
+  const handleSyllabusDownload = () => {
+    if (typeof onSyllabusDownload === 'function') {
+      onSyllabusDownload(course)
+      return
+    }
+    if (typeof window === 'undefined') return
+    const syllabusUrl = course?.syllabusUrl || '/lead-magnets/detailed-syllabus.pdf'
+    window.open(syllabusUrl, '_blank', 'noopener,noreferrer')
+  }
 
   useEffect(() => {
     if (!tabItems.includes(activeTab)) {
@@ -201,14 +211,23 @@ function CoursePage({ course }) {
                 })}
               </div>
             </div>
-            <a
-              href={applicationFormUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 inline-flex items-center justify-center rounded-md bg-[#0086c9] px-5 py-2 text-sm font-semibold text-white shadow-sm"
-            >
-              Enrol Now
-            </a>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <a
+                href={applicationFormUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center rounded-md bg-[#0086c9] px-5 py-2 text-sm font-semibold text-white shadow-sm"
+              >
+                Enrol Now
+              </a>
+              <button
+                type="button"
+                onClick={handleSyllabusDownload}
+                className="inline-flex items-center justify-center rounded-md border border-[#0086c9] px-5 py-2 text-sm font-semibold text-[#0086c9]"
+              >
+                Download Detailed Syllabus
+              </button>
+            </div>
           </div>
           <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft">
             <div className="overflow-hidden rounded-xl border border-slate-200">
@@ -228,6 +247,13 @@ function CoursePage({ course }) {
             >
               Enrol Now
             </a>
+            <button
+              type="button"
+              onClick={handleSyllabusDownload}
+              className="mt-2 inline-flex w-full items-center justify-center rounded-md border border-[#0086c9] px-4 py-2 text-xs font-semibold text-[#0086c9]"
+            >
+              Download Detailed Syllabus
+            </button>
             <dl className="mt-4 grid gap-2 text-xs text-slate-600">
               <div className="flex items-center justify-between">
                 <dt>Duration</dt>
