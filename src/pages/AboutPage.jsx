@@ -137,7 +137,7 @@ function AboutPage() {
               className="h-56 w-full rounded-xl object-cover"
             />
             <div className="mt-4 rounded-xl bg-[#e7f3fb] px-4 py-2 text-center">
-              <p className="text-sm font-semibold text-[#0086c9]">Aalok Example</p>
+              <p className="text-sm font-semibold text-[#0086c9]">Raj Agarwal</p>
               <p className="text-xs text-slate-600">CEO, CodeString</p>
             </div>
             <button

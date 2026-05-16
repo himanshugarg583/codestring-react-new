@@ -3,11 +3,11 @@ import { useState } from 'react'
 const contactCards = [
   {
     title: 'Call Us',
-    details: ['+91 98765 43210', '+91 91234 56789'],
+    details: ['+91 63765 32619', '+91 91234 56789'],
   },
   {
     title: 'Drop An Email',
-    details: ['support@codestring.in'],
+    details: ['info@codestring.in'],
   },
   {
     title: 'Visit Us',
@@ -16,15 +16,35 @@ const contactCards = [
 ]
 
 const faqItems = [
-  'Where will the course be assigned to me?',
-  'Do I need any technical knowledge before starting the course?',
-  'How do I enroll in a course?',
-  'How can I get a discount?',
-  'Where can we attend the sessions? What if I miss a class?',
+  {
+    question: 'Where will the course be assigned to me?',
+    answer:
+      'After enrollment, your course is added to your CodeString student dashboard and you receive a confirmation by email or WhatsApp.',
+  },
+  {
+    question: 'Do I need any technical knowledge before starting the course?',
+    answer:
+      'Most beginner tracks start from the basics. If a course needs prerequisites, it is mentioned on the course page.',
+  },
+  {
+    question: 'How do I enroll in a course?',
+    answer:
+      'Click Enroll or fill the enquiry form. Our team contacts you, confirms the batch, and shares access after payment.',
+  },
+  {
+    question: 'How can I get a discount?',
+    answer:
+      'Discounts depend on ongoing offers, early-bird windows, or group enrollments. Ask the counselor for the latest options.',
+  },
+  {
+    question: 'Where can we attend the sessions? What if I miss a class?',
+    answer:
+      'Sessions are usually live online (sometimes hybrid). If you miss a class, recordings and notes are shared so you can catch up.',
+  },
 ]
 
 const mapSrc =
-  'https://www.openstreetmap.org/export/embed.html?bbox=76.771%2C30.698%2C76.791%2C30.708&layer=mapnik&marker=30.703%2C76.781'
+  'https://www.openstreetmap.org/export/embed.html?bbox=77.0673151%2C28.4296677%2C77.0913054%2C28.4473152&layer=mapnik&marker=28.436816%2C77.0795276'
 
 function ContactPage() {
   const [formData, setFormData] = useState({
@@ -33,6 +53,7 @@ function ContactPage() {
     phone: '',
     question: '',
   })
+  const [openIndex, setOpenIndex] = useState(0)
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -87,15 +108,34 @@ function ContactPage() {
         <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <div className="space-y-3">
-              {faqItems.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700"
-                >
-                  <span>{item}</span>
-                  <span className="text-lg text-slate-400">+</span>
-                </div>
-              ))}
+              {faqItems.map((item, index) => {
+                const isOpen = openIndex === index
+                return (
+                  <div
+                    key={item.question}
+                    className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700"
+                  >
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenIndex((prev) => (prev === index ? null : index))
+                      }
+                      className="flex w-full items-center justify-between text-left"
+                      aria-expanded={isOpen}
+                    >
+                      <span>{item.question}</span>
+                      <span className="text-lg text-slate-400">
+                        {isOpen ? '-' : '+'}
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <p className="mt-2 text-xs text-slate-600">
+                        {item.answer}
+                      </p>
+                    )}
+                  </div>
+                )
+              })}
             </div>
             <button
               type="button"

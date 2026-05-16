@@ -4,7 +4,12 @@ import Footer from './components/Footer'
 import Carousel from './components/Carousel'
 import MentorsCarousel from './components/MentorsCarousel'
 import CoursePage from './pages/CoursePage'
+import CoursesPage from './pages/CoursesPage'
+import BlogDetailPage from './pages/BlogDetailPage'
+import EventDetailPage from './pages/EventDetailPage'
+import FaqPage from './pages/FaqPage'
 import SummerInternshipPage from './pages/SummerInternshipPage'
+import TermsPage from './pages/TermsPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import AboutPage from './pages/AboutPage'
@@ -13,6 +18,8 @@ import BlogPage from './pages/BlogPage'
 import EventsPage from './pages/EventsPage'
 import GalleryPage from './pages/GalleryPage'
 import { courses } from './data/courses'
+import { blogPosts } from './data/blogPosts'
+import { events, pressReleases } from './data/eventsData'
 import { siteContent } from './data/siteContent'
 
 const upsertMetaTag = (attrName, attrValue, content) => {
@@ -56,6 +63,10 @@ const updateSeoTags = (seo) => {
     upsertMetaTag('name', 'keywords', seo.keywords)
   }
 
+  if (seo.robots) {
+    upsertMetaTag('name', 'robots', seo.robots)
+  }
+
   if (seo.canonical) {
     upsertLinkTag('canonical', seo.canonical)
     upsertMetaTag('property', 'og:url', seo.canonical)
@@ -64,6 +75,10 @@ const updateSeoTags = (seo) => {
   if (seo.ogImage) {
     upsertMetaTag('property', 'og:image', seo.ogImage)
     upsertMetaTag('name', 'twitter:image', seo.ogImage)
+  }
+
+  if (seo.ogImageAlt) {
+    upsertMetaTag('property', 'og:image:alt', seo.ogImageAlt)
   }
 
   if (seo.ogType) {
@@ -80,6 +95,10 @@ const updateSeoTags = (seo) => {
 
   if (seo.twitterCard) {
     upsertMetaTag('name', 'twitter:card', seo.twitterCard)
+  }
+
+  if (seo.twitterImageAlt) {
+    upsertMetaTag('name', 'twitter:image:alt', seo.twitterImageAlt)
   }
 }
 
@@ -386,6 +405,9 @@ function App() {
   const [activeCourseSlug, setActiveCourseSlug] = useState(
     courses[0]?.slug || '',
   )
+  const [activeBlogSlug, setActiveBlogSlug] = useState('')
+  const [activeEventSlug, setActiveEventSlug] = useState('')
+  const [activePressSlug, setActivePressSlug] = useState('')
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [isWhatsappOpen, setIsWhatsappOpen] = useState(false)
   const [whatsappMessage, setWhatsappMessage] = useState('')
@@ -412,6 +434,21 @@ function App() {
       const cleanHash = hash.replace('#', '')
       const searchParams = new URLSearchParams(search)
 
+      if (normalizedPath === '/courses') {
+        setActivePage('courses')
+        return
+      }
+
+      if (normalizedPath === '/faq') {
+        setActivePage('faq')
+        return
+      }
+
+      if (normalizedPath === '/terms-and-conditions') {
+        setActivePage('terms')
+        return
+      }
+
       if (normalizedPath === '/summer-internship') {
         setActivePage('summer-internship')
         return
@@ -437,18 +474,57 @@ function App() {
         return
       }
 
+      if (normalizedPath.startsWith('/blog/')) {
+        const slug = decodeURIComponent(normalizedPath.replace('/blog/', ''))
+        setActiveBlogSlug(slug)
+        setActivePage('blog-detail')
+        return
+      }
+
+      if (normalizedPath.startsWith('/events/')) {
+        const slug = decodeURIComponent(normalizedPath.replace('/events/', ''))
+        setActiveEventSlug(slug)
+        setActivePage('event-detail')
+        return
+      }
+
+      if (normalizedPath.startsWith('/press/')) {
+        const slug = decodeURIComponent(normalizedPath.replace('/press/', ''))
+        setActivePressSlug(slug)
+        setActivePage('press-detail')
+        return
+      }
+
       if (normalizedPath === '/blog') {
+        setActiveBlogSlug('')
         setActivePage('blog')
         return
       }
 
       if (normalizedPath === '/events') {
+        setActiveEventSlug('')
+        setActivePressSlug('')
         setActivePage('events')
         return
       }
 
       if (normalizedPath === '/gallery') {
         setActivePage('gallery')
+        return
+      }
+
+      if (cleanHash === 'courses') {
+        setActivePage('courses')
+        return
+      }
+
+      if (cleanHash === 'faq') {
+        setActivePage('faq')
+        return
+      }
+
+      if (cleanHash === 'terms-and-conditions') {
+        setActivePage('terms')
         return
       }
 
@@ -489,6 +565,27 @@ function App() {
 
       if (cleanHash === 'gallery') {
         setActivePage('gallery')
+        return
+      }
+
+      if (cleanHash.startsWith('blog=')) {
+        const slug = cleanHash.replace('blog=', '')
+        setActiveBlogSlug(slug)
+        setActivePage('blog-detail')
+        return
+      }
+
+      if (cleanHash.startsWith('event=')) {
+        const slug = cleanHash.replace('event=', '')
+        setActiveEventSlug(slug)
+        setActivePage('event-detail')
+        return
+      }
+
+      if (cleanHash.startsWith('press=')) {
+        const slug = cleanHash.replace('press=', '')
+        setActivePressSlug(slug)
+        setActivePage('press-detail')
         return
       }
 
@@ -542,27 +639,47 @@ function App() {
 
   useEffect(() => {
     const baseSeo = seo?.base || {}
+    const activeBlogPost = blogPosts.find((post) => post.slug === activeBlogSlug)
+    const blogDetailSeo = activeBlogPost?.seo || {}
+    const activeEvent = events.find((item) => item.slug === activeEventSlug)
+    const eventDetailSeo = activeEvent?.seo || {}
+    const activePress = pressReleases.find(
+      (item) => item.slug === activePressSlug,
+    )
+    const pressDetailSeo = activePress?.seo || {}
     const pageSeo =
-      activePage === 'summer-internship'
-        ? seo?.summerInternship || {}
-        : activePage === 'login'
-          ? seo?.login || {}
-          : activePage === 'register'
-            ? seo?.register || {}
-            : activePage === 'about'
-              ? seo?.about || {}
-              : activePage === 'contact'
-                ? seo?.contact || {}
-                : activePage === 'blog'
-                  ? seo?.blog || {}
-                  : activePage === 'events'
-                    ? seo?.events || {}
-                    : activePage === 'gallery'
-                      ? seo?.gallery || {}
-                      : {}
+      activePage === 'courses'
+        ? seo?.courses || {}
+        : activePage === 'faq'
+          ? seo?.faq || {}
+          : activePage === 'terms'
+            ? seo?.terms || {}
+            : activePage === 'summer-internship'
+              ? seo?.summerInternship || {}
+              : activePage === 'login'
+                ? seo?.login || {}
+                : activePage === 'register'
+                  ? seo?.register || {}
+                  : activePage === 'about'
+                    ? seo?.about || {}
+                    : activePage === 'contact'
+                      ? seo?.contact || {}
+                      : activePage === 'event-detail'
+                        ? eventDetailSeo
+                        : activePage === 'press-detail'
+                          ? pressDetailSeo
+                          : activePage === 'blog-detail'
+                            ? blogDetailSeo
+                            : activePage === 'blog'
+                              ? seo?.blog || {}
+                              : activePage === 'events'
+                                ? seo?.events || {}
+                                : activePage === 'gallery'
+                                  ? seo?.gallery || {}
+                                  : {}
     const resolvedSeo = { ...baseSeo, ...pageSeo }
     updateSeoTags(resolvedSeo)
-  }, [activePage, seo])
+  }, [activePage, activeBlogSlug, activeEventSlug, activePressSlug, seo])
 
   const handleClosePopup = () => {
     setIsPopupOpen(false)
@@ -573,6 +690,9 @@ function App() {
 
   const activeCourse =
     courses.find((course) => course.slug === activeCourseSlug) || courses[0]
+  const activeBlogPost = blogPosts.find((post) => post.slug === activeBlogSlug)
+  const activeEvent = events.find((item) => item.slug === activeEventSlug)
+  const activePress = pressReleases.find((item) => item.slug === activePressSlug)
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -782,7 +902,13 @@ function App() {
         </div>
       ) : null}
 
-      {activePage === 'course' ? (
+      {activePage === 'faq' ? (
+        <FaqPage />
+      ) : activePage === 'terms' ? (
+        <TermsPage />
+      ) : activePage === 'courses' ? (
+        <CoursesPage courses={courses} />
+      ) : activePage === 'course' ? (
         <main>
           <CoursePage
             course={activeCourse}
@@ -799,6 +925,22 @@ function App() {
         <AboutPage />
       ) : activePage === 'contact' ? (
         <ContactPage />
+      ) : activePage === 'event-detail' ? (
+        <EventDetailPage
+          item={activeEvent}
+          typeLabel="Event"
+          backHref="/events"
+          backLabel="Back to Events"
+        />
+      ) : activePage === 'press-detail' ? (
+        <EventDetailPage
+          item={activePress}
+          typeLabel="Press Release"
+          backHref="/events"
+          backLabel="Back to Events"
+        />
+      ) : activePage === 'blog-detail' ? (
+        <BlogDetailPage post={activeBlogPost} />
       ) : activePage === 'blog' ? (
         <BlogPage />
       ) : activePage === 'events' ? (
@@ -821,12 +963,12 @@ function App() {
                   {hero.tagline}
                 </p>
                 <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <button
-                    type="button"
+                  <a
+                    href="/summer-internship"
                     className="rounded-md bg-[#0086c9] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0077b3]"
                   >
                     {hero.cta}
-                  </button>
+                  </a>
                 </div>
               </div>
               <div className="relative flex items-center justify-center">
@@ -1029,12 +1171,12 @@ function App() {
                   </div>
                 ))}
               </div>
-              <button
-                type="button"
-                className="mt-8 rounded-md bg-[#0086c9] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0077b3]"
+              <a
+                href="/courses"
+                className="mt-8 inline-flex rounded-md bg-[#0086c9] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0077b3]"
               >
                 {skills.cta}
-              </button>
+              </a>
             </div>
           </section>
 
@@ -1154,17 +1296,17 @@ function App() {
             </div>
           </div>
           <div className="bg-white">
-            <div className="mx-auto -mt-[150px] max-w-6xl px-4 pb-12 pt-12">
+            <div className="mx-auto mt-8 max-w-6xl px-4 pb-12 pt-12 sm:mt-4 lg:-mt-[150px]">
               <div className="grid gap-4 lg:gap-6 lg:grid-cols-[1.2fr_0.8fr]">
                 <div className="text-center lg:text-left">
                   <h3 className="text-xl font-display font-semibold text-ink">
                     {contactHelp.title}
                   </h3>
-                  <div className="mt-8 grid gap-8 sm:grid-cols-2">
+                  <div className="mt-8 grid gap-6">
                     {contactHelp.options.map((option) => (
                       <div
                         key={option.label}
-                        className="flex items-start gap-4 justify-center sm:justify-start"
+                        className="flex items-start gap-4 text-left"
                       >
                         <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#0086c9] text-white">
                           {contactIcons[option.iconKey]}
@@ -1235,9 +1377,11 @@ function App() {
                 ))}
               </div>
               <a
-                href={applicationFormUrl}
-                target="_blank"
-                rel="noreferrer"
+                href={
+                  course.courseSlug
+                    ? `/course/${encodeURIComponent(course.courseSlug)}`
+                    : applicationFormUrl
+                }
                 className="mt-4 inline-flex items-center justify-center rounded-md bg-[#0086c9] px-4 py-2 text-xs font-semibold text-white shadow-sm"
               >
                 {course.cta}
