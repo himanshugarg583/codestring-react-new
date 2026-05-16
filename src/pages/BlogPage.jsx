@@ -1,124 +1,80 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { blogCategories, blogPosts } from '../data/blogPosts'
 
-const categories = [
-  { label: 'DevOps', accent: '#e7f3fb' },
-  { label: 'Full Stack', accent: '#fde7a0' },
-  { label: 'General', accent: '#e9efff' },
-  { label: 'Insights', accent: '#e6f6ef' },
-  { label: 'QA', accent: '#f7e5a8' },
-  { label: 'Salesforce', accent: '#e3f0c9' },
-]
-
-const blogPosts = [
-  {
-    title: 'How Netflix Uses Data Structures and Algorithms',
-    excerpt:
-      'Ever wondered how recommendation engines work? We break down the core ideas.',
-    image:
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
-    readTime: '8 Min. Read',
-    category: 'General',
-  },
-  {
-    title: 'UI/UX Design: The Difference Every Designer Should Know',
-    excerpt:
-      'Understand the frameworks and thinking that separate UI from UX.',
-    image:
-      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80',
-    readTime: '8 Min. Read',
-    category: 'Insights',
-  },
-  {
-    title: 'What Marketers Must Own in an AI-Driven Market',
-    excerpt:
-      'AI is changing how we create, measure, and optimize campaigns.',
-    image:
-      'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80',
-    readTime: '6 Min. Read',
-    category: 'Insights',
-  },
-  {
-    title: 'Why HR Training Is a Must for Engineers in 2026',
-    excerpt:
-      'Soft skills and communication are part of every high-performing team.',
-    image:
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
-    readTime: '6 Min. Read',
-    category: 'General',
-  },
-  {
-    title: 'How Low-Code and AI Help Junior Full Stack Devs',
-    excerpt:
-      'Explore how tooling helps engineers ship faster without sacrificing quality.',
-    image:
-      'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=800&q=80',
-    readTime: '6 Min. Read',
-    category: 'Full Stack',
-  },
-  {
-    title: 'Top Full Stack Development Trends to Watch',
-    excerpt:
-      'A quick scan of what employers want and how you can prepare.',
-    image:
-      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
-    readTime: '6 Min. Read',
-    category: 'Full Stack',
-  },
-  {
-    title: 'Still Ignoring DSA? This Might Be Why',
-    excerpt:
-      'DSA is not just interviews. It powers efficient production systems too.',
-    image:
-      'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=800&q=80',
-    readTime: '5 Min. Read',
-    category: 'General',
-  },
-  {
-    title: 'What Gen AI Means for Your Career in 2026',
-    excerpt:
-      'How to stay relevant when AI tools become part of every workflow.',
-    image:
-      'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80',
-    readTime: '5 Min. Read',
-    category: 'Insights',
-  },
-  {
-    title: '10 Important Soft Skills Every Computer Engineer Needs',
-    excerpt:
-      'Communication, collaboration, and clarity are now mandatory skills.',
-    image:
-      'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80',
-    readTime: '4 Min. Read',
-    category: 'General',
-  },
-  {
-    title: 'DevOps Pipelines Recruiters Expect in 2026',
-    excerpt:
-      'CI/CD fundamentals, cloud pipelines, and practical tooling checklists.',
-    image:
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
-    readTime: '5 Min. Read',
-    category: 'DevOps',
-  },
-  {
-    title: 'QA Automation Testing: What to Learn First',
-    excerpt:
-      'A starter roadmap for tools, frameworks, and real-world testing skills.',
-    image:
-      'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80',
-    readTime: '6 Min. Read',
-    category: 'QA',
-  },
-  {
-    title: 'Salesforce Admin to Developer: First 90 Days',
-    excerpt:
-      'Key skills, tools, and mini-projects to level up in the ecosystem.',
-    image:
-      'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80',
-    readTime: '6 Min. Read',
-    category: 'Salesforce',
-  },
-]
+const categoryIcons = {
+  DevOps: (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M5 7h14M5 12h14M5 17h9"
+      />
+    </svg>
+  ),
+  'Full Stack': (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6 7l6-4 6 4-6 4-6-4Zm0 5l6 4 6-4M6 17l6 4 6-4"
+      />
+    </svg>
+  ),
+  General: (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6 6h12v12H6zM9 9h6M9 12h6M9 15h4"
+      />
+    </svg>
+  ),
+  Insights: (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 3a7 7 0 0 1 4 12l-1.5 1.5H9.5L8 15A7 7 0 0 1 12 3Zm-2 18h4"
+      />
+    </svg>
+  ),
+  QA: (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M4 7h16v8H7l-3 3V7Zm4 2h6M8 12h4"
+      />
+    </svg>
+  ),
+  Salesforce: (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M7 14a4 4 0 1 1 2-7.5 4.5 4.5 0 0 1 8 2A3.5 3.5 0 0 1 16 16H8a3 3 0 0 1-1-2Z"
+      />
+    </svg>
+  ),
+}
 
 function BlogPage() {
   const [activeCategory, setActiveCategory] = useState('')
@@ -127,12 +83,22 @@ function BlogPage() {
   const filteredPosts = activeCategory
     ? blogPosts.filter((post) => post.category === activeCategory)
     : blogPosts
-  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / pageSize))
+  const totalPages = Math.ceil(filteredPosts.length / pageSize)
   const paginatedPosts = filteredPosts.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize,
   )
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1)
+
+  useEffect(() => {
+    if (totalPages === 0) {
+      setCurrentPage(1)
+      return
+    }
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages)
+    }
+  }, [currentPage, totalPages])
 
   return (
     <main className="bg-white text-ink">
@@ -158,27 +124,12 @@ function BlogPage() {
                 Browse the latest perspectives from our mentors and students.
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500"
-                aria-label="Previous"
-              >
-                <span aria-hidden="true">&lt;</span>
-              </button>
-              <button
-                type="button"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500"
-                aria-label="Next"
-              >
-                <span aria-hidden="true">&gt;</span>
-              </button>
-            </div>
           </div>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {categories.map((category) => {
+            {blogCategories.map((category) => {
               const isActive = activeCategory === category.label
+              const icon = categoryIcons[category.label]
 
               return (
                 <button
@@ -199,9 +150,11 @@ function BlogPage() {
                   }`}
                 >
                   <span
-                    className="mb-2 h-9 w-9 rounded-full"
+                    className="mb-2 flex h-9 w-9 items-center justify-center rounded-full text-slate-700"
                     style={{ backgroundColor: category.accent }}
-                  />
+                  >
+                    {icon}
+                  </span>
                   {category.label}
                 </button>
               )
@@ -212,7 +165,7 @@ function BlogPage() {
             {paginatedPosts.length ? (
               paginatedPosts.map((post) => (
                 <article
-                  key={post.title}
+                  key={post.slug}
                   className="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft"
                 >
                   <div className="overflow-hidden rounded-xl">
@@ -230,12 +183,12 @@ function BlogPage() {
                   <p className="mt-2 text-xs text-slate-600">{post.excerpt}</p>
                   <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
                     <span>{post.readTime}</span>
-                    <button
-                      type="button"
+                    <a
+                      href={`/blog/${encodeURIComponent(post.slug)}`}
                       className="rounded-md bg-[#0086c9] px-3 py-1.5 text-xs font-semibold text-white"
                     >
                       Read More
-                    </button>
+                    </a>
                   </div>
                 </article>
               ))
@@ -246,22 +199,24 @@ function BlogPage() {
             )}
           </div>
 
-          <div className="mt-8 flex items-center justify-center gap-3 text-xs text-slate-600">
-            {pages.map((page) => (
-              <button
-                key={page}
-                type="button"
-                onClick={() => setCurrentPage(page)}
-                className={`h-7 w-7 rounded-full border text-xs font-semibold ${
-                  page === currentPage
-                    ? 'border-[#0086c9] bg-[#0086c9] text-white'
-                    : 'border-slate-200 text-slate-500'
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
+          {totalPages > 1 ? (
+            <div className="mt-8 flex items-center justify-center gap-3 text-xs text-slate-600">
+              {pages.map((page) => (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(page)}
+                  className={`h-7 w-7 rounded-full border text-xs font-semibold ${
+                    page === currentPage
+                      ? 'border-[#0086c9] bg-[#0086c9] text-white'
+                      : 'border-slate-200 text-slate-500'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
       </section>
     </main>

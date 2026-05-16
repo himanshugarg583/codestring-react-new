@@ -1,0 +1,19 @@
+Ye Cloudflare ka “security verification” screen hai. Isko code se “fix” nahi kar sakte — Cloudflare settings me change karna padega.
+
+**Fix ke options (Cloudflare dashboard):**
+1. **Security → WAF/Firewall Rules**  
+   - Rule banao: `country != (your target)`? No.  
+   - Better: **Skip JS Challenge** for `/` (root) and public pages.  
+2. **Security → Settings**  
+   - **Security Level** ko “Low” ya “Essentially Off” karo (temporary test).  
+3. **Bots → Bot Fight Mode**  
+   - If enabled, **disable** or reduce.  
+4. **Speed → Optimization**  
+   - Rocket Loader/JS optimization kabhi kabhi issue karta hai — test ke liye off karo.  
+5. **Firewall → IP Access Rules**  
+   - Apne IP ko allowlist karo (testing ke liye).
+
+**Best practice:**  
+Public marketing site ke liye JS challenge off rakho; sirf admin/login paths pe protection on rakho.
+
+Aapka site Cloudflare pe hai? Agar haan, batao kaunsa plan hai (Free/Pro) aur main exact steps de dunga.

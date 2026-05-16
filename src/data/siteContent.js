@@ -86,19 +86,48 @@ export const siteContent = {
         'CodeString helps students and career switchers build job-ready tech skills with industry-aligned courses, mentorship, projects, and placement support.',
       keywords:
         'CodeString, coding courses, full stack course, MERN course, Salesforce training, DevOps course, QA automation, data science course, internships, placement support, tech training India, learn coding',
+      robots:
+        'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
       canonical: 'https://codestring.in/',
       ogImage: 'https://codestring.in/favicon.png',
+      ogImageAlt: 'CodeString logo',
       ogType: 'website',
       ogSiteName: 'CodeString',
       ogLocale: 'en_IN',
       twitterCard: 'summary_large_image',
+      twitterImageAlt: 'CodeString logo',
+    },
+    courses: {
+      title: 'All Courses | CodeString',
+      description:
+        'Browse every CodeString program by category, compare course details, and pick the track that fits your goals.',
+      keywords:
+        'CodeString courses, full stack courses, Salesforce training, DevOps course, QA automation, AI course, tech training India',
+      canonical: 'https://codestring.in/courses',
+      ogType: 'website',
+    },
+    faq: {
+      title: 'FAQs | CodeString',
+      description:
+        'Find quick answers about CodeString courses, enrollment, certificates, and support.',
+      keywords: 'CodeString FAQs, course FAQs, enrollment help, support',
+      canonical: 'https://codestring.in/faq',
+      ogType: 'website',
+    },
+    terms: {
+      title: 'Terms & Conditions | CodeString',
+      description:
+        'Read the terms and conditions for using CodeString programs and services.',
+      keywords: 'CodeString terms, terms and conditions, policies',
+      canonical: 'https://codestring.in/terms-and-conditions',
+      ogType: 'website',
     },
     summerInternship: {
-      title: 'Summer Internship Program | CodeString',
+      title: 'Summer Internship Program (MSME + ISO) | CodeString',
       description:
-        'Government-recognized summer internship with MSME + ISO certificates, offer letter, mentor support, projects, and verified completion proof.',
+        'Government-recognized summer internship with MSME Verified and ISO Certified certificates, offer letter, mentor support, and industry projects. Choose 4/6/8-week options.',
       keywords:
-        'summer internship, internship certificate, MSME internship, ISO certificate, student internship, tech internship, virtual internship, CodeString',
+        'summer internship program, MSME verified internship, ISO certified internship, offer letter, internship certificate, student internship, tech internship, virtual internship, CodeString',
       canonical: 'https://codestring.in/summer-internship',
       ogType: 'website',
     },
@@ -160,7 +189,10 @@ export const siteContent = {
     },
   },
   hero: {
-    titleLines: ['Turn Curiosity Into Code.', 'Build the Career You Actually Want.'],
+    titleLines: [
+      'CodeString: Industry-Aligned Tech Courses',
+      'Internships, Mentorship & Placement Support.',
+    ],
     tagline:
       'Industry-aligned programs for students, fresh graduates, and career switchers - built by engineers, for engineers.',
     cta: 'Start Learning Free',
@@ -367,6 +399,7 @@ export const siteContent = {
         rating: 5,
         image:
           'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80',
+        courseSlug: 'full-stack-mern-beginner',
         cta: 'Enroll Now',
       },
       {
@@ -376,6 +409,7 @@ export const siteContent = {
         rating: 5,
         image:
           'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=80',
+        courseSlug: 'data-analytics-with-python',
         cta: 'Enroll Now',
       },
       {
@@ -385,6 +419,7 @@ export const siteContent = {
         rating: 5,
         image:
           'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=700&q=80',
+        courseSlug: 'dev-ops',
         cta: 'Enroll Now',
       },
     ],
@@ -403,42 +438,42 @@ export const siteContent = {
         title: 'How Recursion Makes Data Structures Click (Finally)',
         image:
           'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80',
-        link: '#',
+        link: '/blog/recursion-data-structures-click',
         cta: 'Read More ->',
       },
       {
         title: 'Vite vs CRA: What Every React Dev Should Know in 2025',
         image:
           'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80',
-        link: '#',
+        link: '/blog/vite-vs-cra-react-2025',
         cta: 'Read More ->',
       },
       {
         title: 'What Really Happens When You Call an API?',
         image:
           'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=600&q=80',
-        link: '#',
+        link: '/blog/what-happens-when-you-call-api',
         cta: 'Read More ->',
       },
       {
         title: 'Why ML Training Is Actually Like Teaching a Child',
         image:
           'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
-        link: '#',
+        link: '/blog/ml-training-like-teaching-child',
         cta: 'Read More ->',
       },
       {
         title: 'How to Code & Debug Like a Full-Stack Pro',
         image:
           'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=600&q=80',
-        link: '#',
+        link: '/blog/code-debug-full-stack-pro',
         cta: 'Read More ->',
       },
       {
         title: 'Top Full-Stack Dev Trends to Watch in 2025',
         image:
           'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80',
-        link: '#',
+        link: '/blog/full-stack-dev-trends-2025',
         cta: 'Read More ->',
       },
     ],
@@ -446,14 +481,14 @@ export const siteContent = {
   footer: {
     brandTagline: 'Follow CodeString for Regular Updates',
     quickLinks: [
-      { label: 'Courses', href: '#' },
-      { label: 'About', href: '#' },
-      { label: 'FAQs', href: '#' },
-      { label: 'Internships', href: '#' },
+      { label: 'Courses', href: '/courses' },
+      { label: 'About', href: '/about' },
+      { label: 'FAQs', href: '/faq' },
+      { label: 'Internships', href: '/summer-internship' },
     ],
     supportLinks: [
-      { label: 'FAQs', href: '#' },
-      { label: 'Terms & Conditions', href: '#' },
+      { label: 'FAQs', href: '/faq' },
+      { label: 'Terms & Conditions', href: '/terms-and-conditions' },
       { label: 'Refund Policy', href: '#' },
     ],
     contact: {
